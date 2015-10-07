@@ -52,14 +52,14 @@ bool AddingJSON::Describe(ODesc* desc,
 		}
 	// add sensor_name
 	desc->AddRaw(",\"", 2);
-	desc->AddRaw("sensor", 6);
+	desc->AddRaw("sensor_id", 6);
 	desc->AddRaw("\":\"", 3);
 	desc->AddRaw((const char*)sensor_name, strlen(sensor_name));
 	desc->AddRaw("\",",2);
 
 	// add log type
 	desc->AddRaw("\"", 1);
-	desc->AddRaw("type", 4);
+	desc->AddRaw("log_type", 4);
 	desc->AddRaw("\":\"", 3);
 	desc->AddRaw((const char*)type_name, strlen(type_name));
 	desc->AddRaw("\"", 1);

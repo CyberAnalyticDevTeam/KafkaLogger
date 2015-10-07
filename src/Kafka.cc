@@ -35,7 +35,7 @@ public:
 };
 
 
-KafkaWriter::KafkaWriter(WriterFrontend* frontend) : WriterBackend(frontend) 
+KafkaWriter::KafkaWriter(WriterFrontend* frontend) : WriterBackend(frontend)
 {
 
 	json_formatter = 0;
@@ -43,7 +43,7 @@ KafkaWriter::KafkaWriter(WriterFrontend* frontend) : WriterBackend(frontend)
 	producer = NULL;
 	topic = NULL;
 
-	
+
 	// initialize kafka variables...
 	broker_name_len = BifConst::KafkaLogger::broker_name->Len();
 	broker_name = new char[broker_name_len + 1];
@@ -59,7 +59,7 @@ KafkaWriter::KafkaWriter(WriterFrontend* frontend) : WriterBackend(frontend)
     compression_codec = new char[compression_codec_len + 1];
     memcpy(compression_codec, BifConst::KafkaLogger::compression_codec->Bytes(), compression_codec_len);
     compression_codec[compression_codec_len] = 0;
-    
+
     // initialize varibles used to store extra data appended to every message
     // (sensor name and log type)
     int sensor_name_len = BifConst::KafkaLogger::sensor_name->Len();
@@ -80,7 +80,7 @@ KafkaWriter::KafkaWriter(WriterFrontend* frontend) : WriterBackend(frontend)
     client_id[client_id_len] = 0;
 
     json_formatter = new threading::formatter::AddingJSON(this,
-    								threading::formatter::AddingJSON::TS_MILLIS,
+    								threading::formatter::AddingJSON::TS_ISO8601,
     								sensor_name,
     								type_name,
     								BifConst::KafkaLogger::logstash_style_timestamp
@@ -130,19 +130,19 @@ threading::Field** KafkaWriter::MakeFields(const threading::Field* const* fields
 		}
 		else if (strcmp(fields[i]->name, "id.orig_h") == 0)
 		{
-			newName = "source_ip";
+			newName = "id_orig_h";
 		}
 		else if (strcmp(fields[i]->name, "id.orig_p") == 0)
 		{
-			newName = "source_port";
+			newName = "id_orig_p";
 		}
 		else if (strcmp(fields[i]->name, "id.resp_h") == 0)
 		{
-			newName = "dest_ip";
+			newName = "id_resp_h";
 		}
 		else if (strcmp(fields[i]->name,"id.resp_p") == 0)
 		{
-			newName = "dest_port";
+			newName = "id_resp_p";
 		}
 
 		if (newName.empty()){
@@ -214,7 +214,7 @@ bool KafkaWriter::DoInit(const WriterInfo& info, int num_fields, const threading
 		reporter->Error("Failed to create topic.");
 		return false;
 	}
-	
+
 	// set up lookups and renamed fields.
 	fixed_fields = MakeFields(fields, num_fields, Info().path);
 
@@ -240,7 +240,7 @@ bool KafkaWriter::DoWrite(int num_fields, const Field* const * fields, Value** v
     json_formatter->Describe(&buffer, num_fields, fixed_fields, vals);
     const char* bytes = (const char*)buffer.Bytes();
     std::string errstr;
-    
+
 	// actually send the data to Kafka.
     RdKafka::ErrorCode resp = producer->produce(topic,
     											RdKafka::Topic::PARTITION_UA,
