@@ -12,9 +12,9 @@
 #include "logging/WriterBackend.h"
 #include "logging/WriterFrontend.h"
 #include "threading/formatters/JSON.h"
+
 #include <librdkafka/rdkafkacpp.h>
 #include "Type.h"
-#include "AddingJson.h"
 #include <string>
 
 namespace logging { namespace writer {
@@ -41,6 +41,7 @@ protected:
 	
 
 private:
+  bool InitBroker();
 
 	threading::Field** MakeFields(const threading::Field* const* fields, int num_fields, std::string path);
 	long transfer_timeout;
@@ -50,6 +51,7 @@ private:
 	int broker_name_len;
 	char* topic_name;
 	int topic_name_len;
+	
 	char* client_id;
 	int client_id_len;
 	char* compression_codec;
@@ -60,12 +62,13 @@ private:
 	RdKafka::Topic *topic;
 	uint64 batch_size;
 
+  string sensor_id;
 
 	//varible to hold renamed fields
 	threading::Field** fixed_fields;
 	
 	// formatter to turn fields/values into json.
-	threading::formatter::AddingJSON* json_formatter;
+	threading::formatter::JSON* json_formatter;
 	
 };
 

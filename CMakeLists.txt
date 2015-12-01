@@ -12,7 +12,6 @@ if ( LIBRDKAFKA_FOUND )
 	include_directories(BEFORE ${LibRDKafka_INCLUDE_DIR})
 
 	bro_plugin_begin(Kafka KafkaWriter)
-	bro_plugin_cc(src/AddingJson.cc)
 	bro_plugin_cc(src/Kafka.cc)
 	bro_plugin_cc(src/Plugin.cc)
 	bro_plugin_bif(src/kafkawriter.bif)
