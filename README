@@ -2,6 +2,9 @@
 Kafka::KafkaWriter
 =================================
 
+NOTE: The master branch builds against the Bro master branch currently. If you are building for Bro
+v2.4.1, please checkout branch 'v2.4.1'.
+
 Kafka Writer plugin for Bro. This plugin will connect to a Kafka server, and will send JSON-format
 logs to the topic specified. 
 

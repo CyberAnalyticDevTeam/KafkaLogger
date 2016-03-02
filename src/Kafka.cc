@@ -6,7 +6,7 @@
 
 
 // Bro includes
-#include "config.h"
+#include "bro-config.h"
 #include "BroString.h"
 #include "util.h"
 
